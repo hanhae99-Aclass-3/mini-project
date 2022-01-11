@@ -27,7 +27,6 @@ for tr in trs:
     img = tr.select_one('span.p0c-team-squad__member-photo > img')['src']
     name = tr.select_one('div > span.p0c-team-squad__member-name').text.strip()
     number = tr.select_one('span.p0c-team-squad__member-number').text.strip()
-    images.append(img)
     players.append(name)
     numbers.append(number)
 
@@ -69,8 +68,11 @@ def detail_page():
     #         print(img, name, number)
     
     
-
-    return render_template('detail.html', images = images, players = players, numbers = numbers, zip = zip)
+    team_name = '토트넘 홋스퍼 FC'
+    hometown = '잉글랜드 런던 북부 토트넘'
+    home_stadium = '토트넘 홋스퍼 스타디움'
+    team_manager = '안토니오 콘테'
+    return render_template('detail.html', team_name = team_name, hometown = hometown, home_stadium = home_stadium, team_manager = team_manager, players = players, numbers = numbers, zip = zip)
 
 # 상세 페이지 코멘트 업로드하기 API
 @app.route('/api/comment', methods=['POST'])

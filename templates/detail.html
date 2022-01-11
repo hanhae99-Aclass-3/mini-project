@@ -110,11 +110,11 @@
     <div class="wrap">
       <div class="logo">
         <img src="/static/logo.jpeg" />
-        <span class="team-name">토트넘 홋스퍼 FC</span>
+        <span class="team-name">{{team_name}}</span>
       </div>
-      <div class="hometown">연고지: 잉글랜드 런던 북부 토트넘</div>
-      <div class="home-stadium">홈구장: 토트넘 홋스퍼 스타디움</div>
-      <div class="manager">감독: 안토니오 콘테</div>
+      <div class="hometown">연고지: {{hometown}}</div>
+      <div class="home-stadium">홈구장: {{home_stadium}}</div>
+      <div class="manager">감독: {{team_manager}}</div>
       <h3 class="player-list-title">선수 명단</h3>
       <div class="player-list">
         <!-- {% for number, player in zip(numbers, players) %}
