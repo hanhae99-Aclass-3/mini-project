@@ -1,0 +1,128 @@
+<!Doctype html>
+<html lang="ko">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+
+    <!-- 구글폰트 -->
+
+
+    <title>Football Tonight</title>
+
+    <!-- style -->
+    <style type="text/css">
+
+        .mainlogo {
+            background-color: blue;
+            width: 700px;
+            height: 150px;
+            display: inline-block;
+            position: relative;
+        }
+
+        .mytitle {
+            width: 1400px;
+            margin: auto;
+            margin-bottom: 20px;
+        }
+
+        .mainimage {
+            background-color: green;
+            width: 1400px;
+            height: 400px;
+            margin: auto;
+            margin-bottom: 20px;
+        }
+
+        .team-list {
+            width: 1400px;
+            margin: auto;
+        }
+
+        .mybtn {
+            display: inline-block;
+            float: right;
+            margin: 5px;
+        }
+        .eplimage {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+        });
+//---------------즐겨찾기 버튼 클릭시 이동
+        function golike() {
+            window.location.href = "/like"
+        }
+//---------------즐겨찾기 저장, 해당팀의 로고src값과 팀명을 불러옴
+        function save_like(teamlogo, teamname) {
+            $.ajax({
+                type: "POST",
+                url: `/api/like`,
+                data: {
+                    teamlogo_give: teamlogo,
+                    teamname_give: teamname
+                },
+                success: function (response) {
+                    alert(response["msg"])
+                }
+            });
+        }
+    </script>
+
+</head>
+
+<body>
+<div class="mytitle">
+    <div class="mainlogo" onclick="location.href='/'">풋볼투나잇로고</div>
+    <div class="mybtn">
+        <button onclick="golike()">즐겨찾기</button>
+        <button>로그아웃</button>
+    </div>
+</div>
+<div class="mainimage"><img class="eplimage" src="https://resources.premierleague.com/photos/2020/03/13/e6838799-4ef1-43cf-97d9-e3dfb743d067/Statement_Graphic_PL_Lilac.png?width=930&height=620"></div>
+<table class="team-list">
+    <thead>
+    <tr>
+        <th scope="col">순위</th>
+        <th scope="col">팀명</th>
+        <th scope="col">경기수</th>
+        <th scope="col">승</th>
+        <th scope="col">무</th>
+        <th scope="col">패</th>
+        <th scope="col">즐찾</th>
+    </tr>
+    </thead>
+    <tbody id="team-list2">
+            {% for team in result %}
+                <tr>
+                    <td>{{ team[0] }}</td>
+                    <td><img id="team-logo" src="{{ team[1] }}"><a href="#" id="team-name">{{ team[2] }}</a></td>
+                    <td>{{ team[3] }}</td>
+                    <td>{{ team[4] }}</td>
+                    <td>{{ team[5] }}</td>
+                    <td>{{ team[6] }}</td>
+                    <td><button onclick="save_like('{{ team[1] }}', '{{ team[2] }}')">즐찾</button></td>
+                </tr>
+            {% endfor %}
+    </tbody>
+</table>
+</body>
+
+</html>
