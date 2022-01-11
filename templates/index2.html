@@ -11,6 +11,9 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
           crossorigin="anonymous">
 
+    <!-- Bulma Css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+
     <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
@@ -27,7 +30,7 @@
     <style type="text/css">
 
         .mainlogo {
-            background-color: blue;
+            background-color: cadetblue;
             width: 700px;
             height: 150px;
             display: inline-block;
@@ -50,6 +53,10 @@
             display: inline-block;
             float: right;
             margin: 5px;
+        }
+        .likebtn {
+            float: right;
+            margin-bottom: 20px;
         }
 
     </style>
@@ -76,7 +83,7 @@
                                                 <h5 class="card-title">${name}</h5>
                                                 <p class="card-text">팀순위</p>
                                                 <p class="card-text">간단코멘트</p>
-                                                <button type="button" class="btn btn-primary" onclick="delete_mylike('${name}')">즐겨찾기 삭제</button>
+                                                <button type="button" class="btn btn-primary likebtn" onclick="delete_mylike('${name}')">즐겨찾기 삭제</button>
                                             </div>
                                         </div>`
                         $('#my-teams').append(temp_html)
@@ -105,7 +112,8 @@
     <div class="mytitle">
         <div class="mainlogo" onclick="location.href='/'">풋볼투나잇로고</div>
         <div class="mybtn">
-            <button onclick="location.href='/like'">즐겨찾기</button><button onclick="location.href='/login'">로그아웃</button>
+            <button class="button is-success is-outlined" onclick="location.href='/like'">즐겨찾기</button>
+            <button class="button is-danger is-outlined" onclick="location.href='/login'">로그아웃</button>
         </div>
     </div>
     <div class="card-columns mylike" id="my-teams">
