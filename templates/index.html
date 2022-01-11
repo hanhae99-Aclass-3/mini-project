@@ -69,11 +69,6 @@
       }
     </style>
     <script>
-      $(document).ready(function () {});
-      //---------------즐겨찾기 버튼 클릭시 이동
-      function golike() {
-        window.location.href = "/like";
-      }
       //---------------즐겨찾기 저장, 해당팀의 로고src값과 팀명을 불러옴
       function save_like(teamlogo, teamname) {
         $.ajax({
@@ -95,8 +90,8 @@
     <div class="mytitle">
       <div class="mainlogo" onclick="location.href='/'">풋볼투나잇로고</div>
       <div class="mybtn">
-        <button onclick="golike()">즐겨찾기</button>
-        <button>로그아웃</button>
+        <button onclick="location.href='/like'">즐겨찾기</button>
+        <button onclick="location.href='/login'">로그아웃</button>
       </div>
     </div>
     <div class="mainimage">
