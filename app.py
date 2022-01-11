@@ -86,35 +86,50 @@ def team_detail(detail_id, site = ''):
         site = site_list[18]   
     elif detailid == 20:
         site = site_list[19]
-    # 선수단 목록 크롤링   
-    headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}   
-    data = requests.get(site, headers=headers)
-    soup = BeautifulSoup(data.text, 'html.parser')
-    trs = soup.select('body > div.page-container > div.page-container-bg > div > div > div > div.p0c-team-squad__body > ul > li > a')
-    # 선수단과 번호 리스트 
-    players = []
-    numbers = []
-    for tr in trs:
-        name = tr.select_one('div > span.p0c-team-squad__member-name').text.strip()
-        number = tr.select_one('span.p0c-team-squad__member-number').text.strip()
-        players.append(name)
-        numbers.append(number)
 
-    # 팀 이름 크롤링
-    data2 = requests.get(site, headers=headers)
+    # 토큰값 받아옴
+    token_receive = request.cookies.get('mytoken')
 
-    soup2 = BeautifulSoup(data2.text, 'html.parser')
+    # token 값, 시크릿키, 사용알고리즘?확인
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+        # '골닷컴' 크롤링
+        data = requests.get(
+            site,
+            headers=headers)
+        soup = BeautifulSoup(data.text, 'html.parser')
+        trs = soup.select(
+            'body > div.page-container > div.page-container-bg > div > div > div > div.p0c-team-squad__body > ul > li > a')
 
-    
-    teams = soup2.select(
-        'body > div.page-container > div.page-container-bg > div.page-header.tag-header.tag-header-team')
-    # 팀 목록 리스트
-    team_list = []
-    for team in teams:
-        teamname = team.select_one('span').text   
-        team_list.append(teamname)
+        # 크롤링한 데이터를 담을 리스트 준비하기
+        players = []
+        numbers = []
+        for tr in trs:
+            name = tr.select_one('div > span.p0c-team-squad__member-name').text.strip()
+            number = tr.select_one('span.p0c-team-squad__member-number').text.strip()
+            players.append(name)
+            numbers.append(number)
 
-    return render_template('detail.html', players = players, numbers = numbers, team_list = team_list, zip = zip)
+        # 팀 이름 크롤링
+        data2 = requests.get(site, headers=headers)
+
+        soup2 = BeautifulSoup(data2.text, 'html.parser')
+
+        
+        teams = soup2.select(
+            'body > div.page-container > div.page-container-bg > div.page-header.tag-header.tag-header-team')
+        # 팀 목록 리스트
+        team_list = []
+        for team in teams:
+            teamname = team.select_one('span').text   
+            team_list.append(teamname)
+
+        return render_template('detail.html', players=players, numbers=numbers, team_list = team_list, zip=zip)
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+
 
 
 
@@ -157,19 +172,30 @@ def login():
 
 @app.route('/sign_in', methods=['POST'])
 def sign_in():
-    # 로그인
+    # id, pw를 받아서 맞춰보고, 토큰을 만들어 발급한다.
     username_receive = request.form['username_give']
     password_receive = request.form['password_give']
 
+    # 회원가입 때와 같은 방법으로 pw를 암호화한다.
     pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
+
+    # id, 암호화된 pw를 가지고 해당 유저를 찾는다.
     result = db.users.find_one({'username': username_receive, 'password': pw_hash})
 
+    # 찾으면 JWT 토큰을 만들어 발급합니다.
     if result is not None:
+        # JWT 토큰에는, payload와 시크릿키가 필요하다.
+        # 시크릿키가 있어야 토큰을 복호화해서 payload 값을 볼 수 있다.
+        # id와 exp를 담는다. JWT 토큰을 풀면 유저ID 값을 알 수 있다.
+        # exp에는 만료시간을 넣어준다.(seconds,hours등으로 형식은 seconds=60*60*24)는 24시간.
+        # 만료시간이 지나면, 시크릿키로 토큰을 풀때 만료되었다고 에러가 난다.
         payload = {
-            'id': username_receive,
-            'exp': datetime.utcnow() + timedelta(seconds=600)  # 로그인 10초 유지
+            'id': username_receive, # 로그인 10초 유지
+            'exp': datetime.utcnow() + timedelta(seconds=30)  # 로그인 30초 유지
         }
-        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')  #.decode('utf-8') 왜 에러가 나는건지..
+        # 찾으면 토큰을 준다.
+        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+        # .decode('utf-8') 왜 에러가 나는건지..
 
         return jsonify({'result': 'success', 'token': token})
     # 찾지 못하면
@@ -247,10 +273,10 @@ def update_like():
         return redirect(url_for("home"))
 
 
-
+# ------------크롤링
 @app.route('/')
 def home():
-# ------------크롤링
+    # ------------크롤링
     url = 'https://www.goal.com/kr/%ED%94%84%EB%A6%AC%EB%AF%B8%EC%96%B4%EB%A6%AC%EA%B7%B8/%EC%88%9C%EC%9C%84/2kwbbcootiqqgmrzs6o5inle5'
 
     headers = {
@@ -263,6 +289,7 @@ def home():
     teams = soup.select(
         'body > div.page-container > div.page-container-bg > div.mr-gutters.main-container.clearfix > div > div > div.widget-match-standings > div.widget-match-standings__table-container > table > tbody > tr')
     for team in teams:
+
         teamname = team.select_one('td.widget-match-standings__team > a.widget-match-standings__link > span').text  #팀이름
         teamrank = team.select_one('td').text                                                                       #팀순위
         teamlogo = team.select_one('td.widget-match-standings__team > a:nth-child(1) > img')['src']                 #팀로고
@@ -275,19 +302,23 @@ def home():
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        
-        return render_template('index.html', result=team_list, zip = zip)
+        return render_template('index.html', result=team_list)
+
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
-#-----------즐겨찾기 페이지
+
+
+# -----------즐겨찾기 페이지
 @app.route('/like')
 def like():
     token_receive = request.cookies.get('mytoken')
     try:
+
 # -------------사용한 payload가져오기
+
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         return render_template('index2.html')
     except jwt.ExpiredSignatureError:
@@ -349,6 +380,9 @@ def delete_like():
         return jsonify({'result': 'success', 'msg': '삭제'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("login"))
+
+
+
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
