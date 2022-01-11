@@ -52,24 +52,10 @@ def home():
 def like():
     return render_template('index2.html')
 
-headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
 
 
-# '골닷컴' 크롤링
-data = requests.get('https://www.goal.com/kr/%ED%8C%80/%ED%86%A0%ED%8A%B8%EB%84%98%ED%99%8B%EC%8A%A4%ED%8D%BC/22doj4sgsocqpxw45h607udje', headers=headers)
-soup = BeautifulSoup(data.text, 'html.parser')
-trs = soup.select('body > div.page-container > div.page-container-bg > div > div > div > div.p0c-team-squad__body > ul > li > a')
 
-# 크롤링한 데이터를 담을 리스트 준비하기
-images = []
-players = []
-numbers = []
-for tr in trs:
-    img = tr.select_one('span.p0c-team-squad__member-photo > img')['src']
-    name = tr.select_one('div > span.p0c-team-squad__member-name').text.strip()
-    number = tr.select_one('span.p0c-team-squad__member-number').text.strip()
-    players.append(name)
-    numbers.append(number)
+
 
 # 상세 페이지 API
 @app.route('/detail')
@@ -107,6 +93,22 @@ def detail_page():
     #         number = tr.select_one('span.p0c-team-squad__member-number').text.strip()
 
     #         print(img, name, number)
+    headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+    # '골닷컴' 크롤링
+    data = requests.get('https://www.goal.com/kr/%ED%8C%80/%ED%86%A0%ED%8A%B8%EB%84%98%ED%99%8B%EC%8A%A4%ED%8D%BC/22doj4sgsocqpxw45h607udje', headers=headers)
+    soup = BeautifulSoup(data.text, 'html.parser')
+    trs = soup.select('body > div.page-container > div.page-container-bg > div > div > div > div.p0c-team-squad__body > ul > li > a')
+
+    # 크롤링한 데이터를 담을 리스트 준비하기
+    images = []
+    players = []
+    numbers = []
+    for tr in trs:
+        img = tr.select_one('span.p0c-team-squad__member-photo > img')['src']
+        name = tr.select_one('div > span.p0c-team-squad__member-name').text.strip()
+        number = tr.select_one('span.p0c-team-squad__member-number').text.strip()
+        players.append(name)
+        numbers.append(number)
     
     
     team_name = '토트넘 홋스퍼 FC'
