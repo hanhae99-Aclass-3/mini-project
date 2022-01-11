@@ -91,10 +91,6 @@
               //   let nickname = comments[i]["nickname"];
               let comment = comments[i]["comment"];
 
-              //   let temp_html = `<h5 class="card-title">익명의 댓글</h5>
-              //                     <p class="card-text">${comment}</p>
-              //                     <button class="delete-button btn btn-primary" onclick="deleteComment()">삭제</button>`;
-
               let temp_html = `
                 <li class="list-group-item">${comment}</li>
                 <button class="delete-button btn btn-primary" onclick="deleteComment('${comment}')">삭제</button>`;
