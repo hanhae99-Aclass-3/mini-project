@@ -146,7 +146,7 @@ def view_comment():
     return jsonify({'result': 'success', 'all_comments': comments})
 
 # client = MongoClient('내AWS아이피', 27017, username="아이디", password="비밀번호")
-db = client.football_tonight
+# db = client.football_tonight
 
 
 # @app.route('/')
