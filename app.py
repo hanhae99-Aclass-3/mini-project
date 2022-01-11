@@ -280,6 +280,7 @@ def save_like():
     try:
 #-------------사용한 payload가져오기
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        userid = payload['id']
 # ----------저장에 필요한 값 받아오기
         teamlogo_receive = request.form['teamlogo_give']
         teamname_receive = request.form['teamname_give']
@@ -289,7 +290,7 @@ def save_like():
             return jsonify({'msg': '이미 등록된 팀입니다!'})
         else:
             doc = {
-                "userID": payload['id'],
+                "userID": userid,
                 "teamlogo": teamlogo_receive,
                 "teamname": teamname_receive
             }
