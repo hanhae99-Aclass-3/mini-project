@@ -265,6 +265,7 @@ def home():
 def like():
     token_receive = request.cookies.get('mytoken')
     try:
+# -------------사용한 payload가져오기
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         return render_template('index2.html')
     except jwt.ExpiredSignatureError:
@@ -292,7 +293,7 @@ def save_like():
                 "teamlogo": teamlogo_receive,
                 "teamname": teamname_receive
             }
-    #---------즐겨찾기 저장
+#---------즐겨찾기 저장
             db.teamlike.insert_one(doc)
         return jsonify({'result': 'success', 'msg': '즐찾!!'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
@@ -303,7 +304,9 @@ def save_like():
 def get_like():
     token_receive = request.cookies.get('mytoken')
     try:
+# -------------사용한 payload가져오기
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+# ---------------팀당 1개씩만 저장, userid값만 불러오면 됨
         mylike = list(db.teamlike.find({'userID': payload['id']},{'_id':False}))
         return jsonify({'my_like': mylike})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
@@ -314,8 +317,11 @@ def get_like():
 def delete_like():
     token_receive = request.cookies.get('mytoken')
     try:
+# -------------사용한 payload가져오기
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+#---------------팀명 가져오기
         teamname_receive = request.form['teamname_give']
+#------------------팀명과 payload의 id값만 찾아와서 삭제
         db.teamlike.delete_one({'teamname': teamname_receive, 'userID': payload['id']})
         return jsonify({'result': 'success', 'msg': '삭제'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
