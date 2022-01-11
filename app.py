@@ -2,7 +2,7 @@ from pymongo import MongoClient
 from bs4 import BeautifulSoup
 from flask import Flask, render_template, jsonify, request, redirect, url_for
 import requests
-import pyjwt
+import jwt
 import datetime
 import hashlib
 from werkzeug.utils import secure_filename
@@ -39,17 +39,21 @@ def home():
         teamd = team.select_one('td.widget-match-standings__matches-drawn').text
         teaml = team.select_one('td.widget-match-standings__matches-lost').text
         team_list.append([teamrank, teamlogo, teamname, teamp, teamw, teamd, teaml])
-    return render_template('index.html', result=team_list)
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+
+        return render_template('index.html', result=team_list)
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 @app.route('/like')
 def like():
     return render_template('index2.html')
 
 headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
 
-# index.html로 접속하기
-@app.route('/')
-def index():
-    return render_template('index.html')
 
 # '골닷컴' 크롤링
 data = requests.get('https://www.goal.com/kr/%ED%8C%80/%ED%86%A0%ED%8A%B8%EB%84%98%ED%99%8B%EC%8A%A4%ED%8D%BC/22doj4sgsocqpxw45h607udje', headers=headers)
@@ -145,17 +149,17 @@ def view_comment():
 db = client.football_tonight
 
 
-@app.route('/')
-def home():
-    token_receive = request.cookies.get('mytoken')
-    try:
-        payload = pyjwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+# @app.route('/')
+# def home():
+#     token_receive = request.cookies.get('mytoken')
+#     try:
+#         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
 
-        return render_template('index.html')
-    except pyjwt.ExpiredSignatureError:
-        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
-    except pyjwt.exceptions.DecodeError:
-        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+#         return render_template('index.html')
+#     except jwt.ExpiredSignatureError:
+#         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+#     except jwt.exceptions.DecodeError:
+#         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
 
 @app.route('/login')
@@ -178,7 +182,7 @@ def sign_in():
             'id': username_receive,
             'exp': datetime.utcnow() + timedelta(seconds=10)  # 로그인 10초 유지
         }
-        token = pyjwt.encode(payload, SECRET_KEY, algorithm='HS256')  #.decode('utf-8') 왜 에러가 나는건지..
+        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')  #.decode('utf-8') 왜 에러가 나는건지..
 
         return jsonify({'result': 'success', 'token': token})
     # 찾지 못하면
@@ -216,10 +220,10 @@ def check_dup():
 def save_img():
     token_receive = request.cookies.get('mytoken')
     try:
-        payload = pyjwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         # 프로필 업데이트
         return jsonify({"result": "success", 'msg': '프로필을 업데이트했습니다.'})
-    except (pyjwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
 
@@ -227,10 +231,10 @@ def save_img():
 def posting():
     token_receive = request.cookies.get('mytoken')
     try:
-        payload = pyjwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         # 포스팅하기
         return jsonify({"result": "success", 'msg': '포스팅 성공'})
-    except (pyjwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
 
@@ -238,10 +242,10 @@ def posting():
 def get_posts():
     token_receive = request.cookies.get('mytoken')
     try:
-        payload = pyjwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         # 포스팅 목록 받아오기
         return jsonify({"result": "success", "msg": "포스팅을 가져왔습니다."})
-    except (pyjwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
 
@@ -249,10 +253,10 @@ def get_posts():
 def update_like():
     token_receive = request.cookies.get('mytoken')
     try:
-        payload = pyjwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         # 좋아요 수 변경
         return jsonify({"result": "success", 'msg': 'updated'})
-    except (pyjwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
 
