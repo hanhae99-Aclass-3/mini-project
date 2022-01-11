@@ -1,114 +1,135 @@
-<!Doctype html>
+<!DOCTYPE html>
 <html lang="ko">
-
-<head>
+  <head>
     <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
 
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-          crossorigin="anonymous">
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+
+    <!-- Bulma Css -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
+    />
 
     <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-            crossorigin="anonymous"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
 
     <!-- 구글폰트 -->
-
-
 
     <title>Football Tonight</title>
 
     <!-- style -->
     <style type="text/css">
-
-        .mainlogo {
-            background-color: blue;
-            width: 700px;
-            height: 150px;
-            display: inline-block;
-            position: relative;
-        }
-        .mytitle {
-            width: 1400px;
-            margin: auto;
-            margin-bottom: 20px;
-        }
-        .mylike {
-            width: 1400px;
-            margin: auto;
-        }
-        .myteam {
-            display: block;
-            width: 600px;
-        }
-        .mybtn {
-            display: inline-block;
-            float: right;
-            margin: 5px;
-        }
-
+      .mainlogo {
+        background-color: cadetblue;
+        width: 700px;
+        height: 150px;
+        display: inline-block;
+        position: relative;
+      }
+      .mytitle {
+        width: 1400px;
+        margin: auto;
+        margin-bottom: 20px;
+      }
+      .mylike {
+        width: 1400px;
+        margin: auto;
+      }
+      .myteam {
+        display: block;
+        width: 600px;
+      }
+      .mybtn {
+        display: inline-block;
+        float: right;
+        margin: 5px;
+      }
+      .likebtn {
+        float: right;
+        margin-bottom: 20px;
+      }
     </style>
     <script>
-        $(document).ready(function () {
-            get_mylike()
-        });
-//-----------즐겨찾기 목록 불러오기
-        function get_mylike() {
-            $('#my-teams').empty()
-            $.ajax({
-                type: "GET",
-                url: `/api/like`,
-                data: {},
-                success: function (response) {
-                    let myteams = response['my_like']
-                    for (let i = 0; i < myteams.length; i++) {
-                        let logo = myteams[i]['teamlogo']
-                        let name = myteams[i]['teamname']
+      $(document).ready(function () {
+        get_mylike();
+      });
+      //-----------즐겨찾기 목록 불러오기
+      function get_mylike() {
+        $("#my-teams").empty();
+        $.ajax({
+          type: "GET",
+          url: `/api/like`,
+          data: {},
+          success: function (response) {
+            let myteams = response["my_like"];
+            for (let i = 0; i < myteams.length; i++) {
+              let logo = myteams[i]["teamlogo"];
+              let name = myteams[i]["teamname"];
 
-                        let temp_html = `<div class="card myteam">
+              let temp_html = `<div class="card myteam">
                                             <img class="card-img-top" src="${logo}" alt="Card image cap">
                                             <div class="card-body">
                                                 <h5 class="card-title">${name}</h5>
                                                 <p class="card-text">팀순위</p>
                                                 <p class="card-text">간단코멘트</p>
-                                                <button type="button" class="btn btn-primary" onclick="delete_mylike('${name}')">즐겨찾기 삭제</button>
+                                                <button type="button" class="btn btn-primary likebtn" onclick="delete_mylike('${name}')">즐겨찾기 삭제</button>
                                             </div>
-                                        </div>`
-                        $('#my-teams').append(temp_html)
-
-                    }
-                }
-            });
-        }
-//------------즐겨찾기 목록 삭제
-        function delete_mylike(name) {
-            $.ajax({
-                type: "POST",
-                url: `/api/deletelike`,
-                data: { teamname_give: name },
-                success: function (response) {
-                    alert(response["msg"])
-                    window.location.reload()
-                },
-            });
-        }
+                                        </div>`;
+              $("#my-teams").append(temp_html);
+            }
+          },
+        });
+      }
+      //------------즐겨찾기 목록 삭제
+      function delete_mylike(name) {
+        $.ajax({
+          type: "POST",
+          url: `/api/deletelike`,
+          data: { teamname_give: name },
+          success: function (response) {
+            alert(response["msg"]);
+            window.location.reload();
+          },
+        });
+      }
     </script>
+  </head>
 
-</head>
-
-<body>
+  <body>
     <div class="mytitle">
-        <div class="mainlogo" onclick="location.href='/'">풋볼투나잇로고</div>
-        <div class="mybtn">
-            <button onclick="location.href='/like'">즐겨찾기</button><button onclick="location.href='/login'">로그아웃</button>
-        </div>
+      <div class="mainlogo" onclick="location.href='/'">풋볼투나잇로고</div>
+      <div class="mybtn">
+        <button
+          class="button is-success is-outlined"
+          onclick="location.href='/like'"
+        >
+          즐겨찾기
+        </button>
+        <button
+          class="button is-danger is-outlined"
+          onclick="location.href='/login'"
+        >
+          로그아웃
+        </button>
+      </div>
     </div>
-    <div class="card-columns mylike" id="my-teams">
-    </div>
-</body>
+    <div class="card-columns mylike" id="my-teams"></div>
+  </body>
 </html>
