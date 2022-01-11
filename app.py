@@ -145,7 +145,7 @@ def sign_in():
     if result is not None:
         payload = {
             'id': username_receive,
-            'exp': datetime.utcnow() + timedelta(seconds=10)  # 로그인 10초 유지
+            'exp': datetime.utcnow() + timedelta(seconds=600)  # 로그인 10초 유지
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')  #.decode('utf-8') 왜 에러가 나는건지..
 
@@ -263,38 +263,63 @@ def home():
 #-----------즐겨찾기 페이지
 @app.route('/like')
 def like():
-    return render_template('index2.html')
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        return render_template('index2.html')
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
 #-----------즐겨찾기 기능
 @app.route('/api/like', methods=['POST'])
 def save_like():
+    token_receive = request.cookies.get('mytoken')
+    try:
+#-------------사용한 payload가져오기
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
 # ----------저장에 필요한 값 받아오기
-    teamlogo_receive = request.form['teamlogo_give']
-    teamname_receive = request.form['teamname_give']
+        teamlogo_receive = request.form['teamlogo_give']
+        teamname_receive = request.form['teamname_give']
 #---------db에 입력된 값을 찾아 존재하는지 확인하여 중복 방지
-    team = db.teamlike.find_one({'teamname': teamname_receive}, {'_id': False})
-    if (team is not None):
-        return jsonify({'msg': '이미 등록된 팀입니다!'})
-    doc = {
-        "teamlogo": teamlogo_receive,
-        "teamname": teamname_receive
-    }
-#---------즐겨찾기 저장
-    db.teamlike.insert_one(doc)
-    return jsonify({'result': 'success', 'msg': '즐찾!!'})
+        team = db.teamlike.find_one({'teamname': teamname_receive, 'userID': payload['id']}, {'_id': False})
+        if (team is not None):
+            return jsonify({'msg': '이미 등록된 팀입니다!'})
+        else:
+            doc = {
+                "userID": payload['id'],
+                "teamlogo": teamlogo_receive,
+                "teamname": teamname_receive
+            }
+    #---------즐겨찾기 저장
+            db.teamlike.insert_one(doc)
+        return jsonify({'result': 'success', 'msg': '즐찾!!'})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("login"))
 
 #----------즐겨찾기 보기
 @app.route('/api/like', methods=['GET'])
 def get_like():
-    mylike = list(db.teamlike.find({},{'_id':False}))
-    return jsonify({'my_like': mylike})
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        mylike = list(db.teamlike.find({'userID': payload['id']},{'_id':False}))
+        return jsonify({'my_like': mylike})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("login"))
 
 #---------즐겨찾기 삭제
 @app.route('/api/deletelike', methods=['POST'])
 def delete_like():
-    teamname_receive = request.form['teamname_give']
-    db.teamlike.delete_one({'teamname': teamname_receive})
-    return jsonify({'result': 'success', 'msg': '삭제'})
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        teamname_receive = request.form['teamname_give']
+        db.teamlike.delete_one({'teamname': teamname_receive, 'userID': payload['id']})
+        return jsonify({'result': 'success', 'msg': '삭제'})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("login"))
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
