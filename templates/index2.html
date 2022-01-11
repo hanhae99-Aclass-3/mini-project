@@ -34,7 +34,7 @@
             position: relative;
         }
         .mytitle {
-            width: 1000px;
+            width: 1400px;
             margin: auto;
             margin-bottom: 20px;
         }
@@ -48,61 +48,67 @@
         }
         .mybtn {
             display: inline-block;
-            position: absolute;
+            float: right;
             margin: 5px;
         }
 
     </style>
     <script>
+        $(document).ready(function () {
+            get_mylike()
+        });
+//-----------즐겨찾기 목록 불러오기
+        function get_mylike() {
+            $('#my-teams').empty()
+            $.ajax({
+                type: "GET",
+                url: `/api/like`,
+                data: {},
+                success: function (response) {
+                    let myteams = response['my_like']
+                    for (let i = 0; i < myteams.length; i++) {
+                        let logo = myteams[i]['teamlogo']
+                        let name = myteams[i]['teamname']
 
+                        let temp_html = `<div class="card myteam">
+                                            <img class="card-img-top" src="${logo}" alt="Card image cap">
+                                            <div class="card-body">
+                                                <h5 class="card-title">${name}</h5>
+                                                <p class="card-text">팀순위</p>
+                                                <p class="card-text">간단코멘트</p>
+                                                <button type="button" class="btn btn-primary" onclick="delete_mylike('${name}')">즐겨찾기 삭제</button>
+                                            </div>
+                                        </div>`
+                        $('#my-teams').append(temp_html)
+
+                    }
+                }
+            });
+        }
+//------------즐겨찾기 목록 삭제
+        function delete_mylike(name) {
+            $.ajax({
+                type: "POST",
+                url: `/api/deletelike`,
+                data: { teamname_give: name },
+                success: function (response) {
+                    alert(response["msg"])
+                    window.location.reload()
+                },
+            });
+        }
     </script>
 
 </head>
 
 <body>
     <div class="mytitle">
-        <div class="mainlogo">풋볼투나잇로고</div>
+        <div class="mainlogo" onclick="location.href='/'">풋볼투나잇로고</div>
         <div class="mybtn">
             <button>즐겨찾기</button><button>로그아웃</button>
         </div>
     </div>
-    <div class="card-columns mylike">
-        <div class="card myteam">
-            <img class="card-img-top" src="..." alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title">팀이름</h5>
-                <p class="card-text">팀순위</p>
-                <p class="card-text">간단코멘트</p>
-                <button type="button" class="btn btn-primary">즐겨찾기 삭제</button>
-            </div>
-        </div>
-        <div class="card">
-            <img class="card-img-top" src="..." alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title">팀이름</h5>
-                <p class="card-text">팀순위</p>
-                <p class="card-text">간단코멘트</p>
-                <button type="button" class="btn btn-primary">즐겨찾기 삭제</button>
-            </div>
-        </div>
-        <div class="card">
-            <img class="card-img-top" src="..." alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title">팀이름</h5>
-                <p class="card-text">팀순위</p>
-                <p class="card-text">간단코멘트</p>
-                <button type="button" class="btn btn-primary">즐겨찾기 삭제</button>
-            </div>
-        </div>
-        <div class="card">
-            <img class="card-img-top" src="..." alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title">팀이름</h5>
-                <p class="card-text">팀순위</p>
-                <p class="card-text">간단코멘트</p>
-                <button type="button" class="btn btn-primary">즐겨찾기 삭제</button>
-            </div>
-        </div>
+    <div class="card-columns mylike" id="my-teams">
     </div>
 </body>
 </html>

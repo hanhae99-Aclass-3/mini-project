@@ -37,8 +37,9 @@
         display: inline-block;
         position: relative;
       }
+
       .mytitle {
-        width: 1000px;
+        width: 1400px;
         margin: auto;
         margin-bottom: 20px;
       }
@@ -58,25 +59,52 @@
 
       .mybtn {
         display: inline-block;
-        position: absolute;
+        float: right;
         margin: 5px;
+      }
+      .eplimage {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
       }
     </style>
     <script>
+      $(document).ready(function () {});
+      //---------------즐겨찾기 버튼 클릭시 이동
       function golike() {
         window.location.href = "/like";
+      }
+      //---------------즐겨찾기 저장, 해당팀의 로고src값과 팀명을 불러옴
+      function save_like(teamlogo, teamname) {
+        $.ajax({
+          type: "POST",
+          url: `/api/like`,
+          data: {
+            teamlogo_give: teamlogo,
+            teamname_give: teamname,
+          },
+          success: function (response) {
+            alert(response["msg"]);
+          },
+        });
       }
     </script>
   </head>
 
   <body>
     <div class="mytitle">
-      <div class="mainlogo">풋볼투나잇로고</div>
+      <div class="mainlogo" onclick="location.href='/'">풋볼투나잇로고</div>
       <div class="mybtn">
-        <button onclick="golike()">즐겨찾기</button><button>로그아웃</button>
+        <button onclick="golike()">즐겨찾기</button>
+        <button>로그아웃</button>
       </div>
     </div>
-    <div class="mainimage">EPL이미지</div>
+    <div class="mainimage">
+      <img
+        class="eplimage"
+        src="https://resources.premierleague.com/photos/2020/03/13/e6838799-4ef1-43cf-97d9-e3dfb743d067/Statement_Graphic_PL_Lilac.png?width=930&height=620"
+      />
+    </div>
     <table class="team-list">
       <thead>
         <tr>
@@ -89,18 +117,24 @@
           <th scope="col">즐찾</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="team-list2">
         {% for team in result %}
         <tr>
           <td>{{ team[0] }}</td>
           <td>
-            <img src="{{ team[1] }}" /><a href="#" border="0">{{ team[2] }}</a>
+            <img id="team-logo" src="{{ team[1] }}" /><a href="#" id="team-name"
+              >{{ team[2] }}</a
+            >
           </td>
           <td>{{ team[3] }}</td>
           <td>{{ team[4] }}</td>
           <td>{{ team[5] }}</td>
           <td>{{ team[6] }}</td>
-          <td><button>즐찾</button></td>
+          <td>
+            <button onclick="save_like('{{ team[1] }}', '{{ team[2] }}')">
+              즐찾
+            </button>
+          </td>
         </tr>
         {% endfor %}
       </tbody>
