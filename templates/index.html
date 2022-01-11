@@ -16,6 +16,9 @@
       crossorigin="anonymous"
     />
 
+    <!-- Bulma Css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+
     <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script
@@ -31,7 +34,7 @@
     <!-- style -->
     <style type="text/css">
       .mainlogo {
-        background-color: blue;
+        background-color: cadetblue;
         width: 700px;
         height: 150px;
         display: inline-block;
@@ -90,8 +93,8 @@
     <div class="mytitle">
       <div class="mainlogo" onclick="location.href='/'">풋볼투나잇로고</div>
       <div class="mybtn">
-        <button onclick="location.href='/like'">즐겨찾기</button>
-        <button onclick="location.href='/login'">로그아웃</button>
+        <button class="button is-success is-outlined" onclick="location.href='/like'">즐겨찾기</button>
+        <button class="button is-danger is-outlined" onclick="location.href='/login'">로그아웃</button>
       </div>
     </div>
     <div class="mainimage">
@@ -100,16 +103,16 @@
         src="https://resources.premierleague.com/photos/2020/03/13/e6838799-4ef1-43cf-97d9-e3dfb743d067/Statement_Graphic_PL_Lilac.png?width=930&height=620"
       />
     </div>
-    <table class="team-list">
+    <table class="table team-list">
       <thead>
         <tr>
-          <th scope="col">순위</th>
-          <th scope="col">팀명</th>
-          <th scope="col">경기수</th>
-          <th scope="col">승</th>
-          <th scope="col">무</th>
-          <th scope="col">패</th>
-          <th scope="col">즐찾</th>
+          <th>순위</th>
+          <th>팀명</th>
+          <th>경기수</th>
+          <th>승리</th>
+          <th>무승부</th>
+          <th>패배</th>
+          <th>즐겨찾기</th>
         </tr>
       </thead>
       <tbody id="team-list2">
@@ -126,7 +129,7 @@
           <td>{{ team[5] }}</td>
           <td>{{ team[6] }}</td>
           <td>
-            <button onclick="save_like('{{ team[1] }}', '{{ team[2] }}')">
+            <button class="button is-warning" onclick="save_like('{{ team[1] }}', '{{ team[2] }}')">
               즐찾
             </button>
           </td>
