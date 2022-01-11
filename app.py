@@ -16,10 +16,12 @@ headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/
 def index():
     return render_template('index.html')
 
-
+# '골닷컴' 크롤링
 data = requests.get('https://www.goal.com/kr/%ED%8C%80/%ED%86%A0%ED%8A%B8%EB%84%98%ED%99%8B%EC%8A%A4%ED%8D%BC/22doj4sgsocqpxw45h607udje', headers=headers)
 soup = BeautifulSoup(data.text, 'html.parser')
 trs = soup.select('body > div.page-container > div.page-container-bg > div > div > div > div.p0c-team-squad__body > ul > li > a')
+
+# 크롤링한 데이터를 담을 리스트 준비하기
 images = []
 players = []
 numbers = []
