@@ -47,6 +47,7 @@
       .team-name {
         font-weight: bold;
         font-size: 36px;
+        margin-bottom: 20px;
       }
     </style>
     <script type="text/javascript">
@@ -104,13 +105,14 @@
   </head>
   <body>
     <div class="wrap">
+      {% for teamname in team_list %}
       <div class="logo">
-        <img src="/static/logo.jpeg" />
-        <span class="team-name">{{team_name}}</span>
+        <h1 class="team-name">{{teamname}}</h1>
+        <button class="home-button btn btn-primary" onclick="history.back()">
+          홈으로
+        </button>
       </div>
-      <div class="hometown">연고지: {{hometown}}</div>
-      <div class="home-stadium">홈구장: {{home_stadium}}</div>
-      <div class="manager">감독: {{team_manager}}</div>
+      {% endfor %}
       <h3 class="player-list-title">선수 명단</h3>
       <div class="player-list">
         <!-- {% for number, player in zip(numbers, players) %}

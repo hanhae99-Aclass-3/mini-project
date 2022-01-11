@@ -122,7 +122,9 @@
         <tr>
           <td>{{ team[0] }}</td>
           <td>
-            <img id="team-logo" src="{{ team[1] }}" /><a href="#" id="team-name"
+            <img id="team-logo" src="{{ team[1] }}" /><a
+              href="{{url_for('team_detail', detail_id=team[0])}}"
+              id="team-name"
               >{{ team[2] }}</a
             >
           </td>
