@@ -94,8 +94,22 @@
       }
 
       function logout() {
-        $.removeCookie("mytoken");
-        window.location.replace("/");
+        let username = "asdf12";
+        $.ajax({
+          type: "POST",
+          url: "/signout",
+          data: {
+            username_give: username,
+          },
+          success: function (response) {
+            if (response["result"] == "success") {
+              mytoken = $.cookie("mytoken", response["token"], { path: "/" });
+              window.location.replace("/login");
+            } else {
+              alert(response["msg"]);
+            }
+          },
+        });
       }
     </script>
   </head>
