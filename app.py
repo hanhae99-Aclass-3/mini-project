@@ -161,7 +161,6 @@ def team_detail(detail_id, site = ''):
 
 
 
-
 # 상세 페이지 코멘트 업로드하기 API
 @app.route('/api/comment', methods=['POST'])
 def upload_comment():
