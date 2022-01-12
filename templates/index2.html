@@ -69,6 +69,7 @@
     <script>
       $(document).ready(function () {
         get_mylike();
+        myname();
       });
       //-----------즐겨찾기 목록 불러오기
       function get_mylike() {
@@ -109,6 +110,20 @@
           },
         });
       }
+      //------닉네임 표시
+      function myname() {
+        $.ajax({
+          type: "GET",
+          url: `/api/nickname`,
+          data: {},
+          success: function (response) {
+            let nickname = response['my_name'][0]['nickname']
+            let temp_html = `<button class="button is-link is-inverted">${nickname}님 환영합니다!</button>`
+
+            $('#mynickname').append(temp_html)
+          },
+        });
+      }
     </script>
   </head>
 
@@ -116,6 +131,7 @@
     <div class="mytitle">
       <div class="mainlogo" onclick="location.href='/'">풋볼투나잇로고</div>
       <div class="mybtn">
+        <button class="button is-link is-inverted" id="mynickname"></button>
         <button
           class="button is-success is-outlined"
           onclick="location.href='/like'"
