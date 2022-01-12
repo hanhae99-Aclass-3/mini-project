@@ -29,8 +29,7 @@
             integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
             crossorigin="anonymous"
     ></script>
-    <!-- JS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
     <!-- 구글폰트 -->
@@ -79,6 +78,10 @@
         }
     </style>
     <script>
+        $(document).ready(function () {
+            myname();
+        });
+
         function golike() {
             window.location.href = "/like";
         }
@@ -98,22 +101,35 @@
             });
         }
 
-        function logout() {
-            let username = 'asdf12'
+        //-------------닉네임 표시
+        function myname() {
             $.ajax({
-                type: "POST",
-                url: "/signout",
-                data: {
-                    username_give: username,
+                type: "GET",
+                url: `/api/nickname`,
+                data: {},
+                success: function (response) {
+                    //my_name값을 넘겨받아서 'nickname'값만 표시
+                    let nickname = response['my_name'][0]['nickname']
+                    let temp_html = `<button class="button is-link is-inverted">${nickname}님 환영합니다!</button>`
+
+                    $('#mynickname').append(temp_html)
                 },
+            });
+        }
+
+        function logout() {
+            $.ajax({
+                type: "GET",
+                url: "/signout",
+                data: {},
                 success: function (response) {
                     if (response["result"] == "success") {
-                        mytoken = $.cookie("mytoken", response["token"], {path: "/"});
+                        $.cookie("mytoken", response["token"], {path: "/"});
                         window.location.replace("/login");
                     } else {
                         alert(response["msg"]);
                     }
-                }
+                },
             });
         }
     </script>
@@ -123,6 +139,7 @@
 <div class="mytitle">
     <div class="mainlogo" onclick="location.href='/'">풋볼투나잇로고</div>
     <div class="mybtn">
+        <button class="button is-link is-inverted" id="mynickname"></button>
         <button class="button is-success is-outlined" onclick="golike()">
             즐겨찾기
         </button>
