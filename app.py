@@ -308,7 +308,19 @@ def home():
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
-
+#------------닉네임표시
+@app.route('/api/nickname', methods=['GET'])
+def nickname():
+    token_receive = request.cookies.get('mytoken')
+    try:
+# -------------사용한 payload가져오기
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+# ---------------저장된 유저정보 userid값으로 대조하여 꺼내기
+        myname = list(db.users.find({'username': payload['id']},{'_id':False}))
+#--------------유저정보 넘기기
+        return jsonify({'my_name': myname})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("login"))
 
 # -----------즐겨찾기 페이지
 @app.route('/like')
