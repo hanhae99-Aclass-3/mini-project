@@ -392,7 +392,31 @@ def delete_like():
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("login"))
 
+@app.route('/signout', methods=['POST'])
+def sign_out():
+    # 이미 로그인한 상태에서만 메인페이지 확인가능하니, 로그인과는 다르게 id만  받아서 맞춰보고, 새 토큰을 만들어 발급한다.
+    username_receive = request.form['username_give']
 
+    # id를 가지고 해당 유저를 찾는다.
+    result = db.users.find_one({'username': username_receive})
+
+    # 찾으면 JWT 토큰을 새로 만들어 발급합니다.
+    if result is not None:
+        # exp에는 만료시간을 넣어준다.(seconds,hours등으로 형식은 seconds=60*60*24)는 24시간.
+        # 만료시간이 지나면, 시크릿키로 토큰을 풀때 만료되었다고 에러가 난다.
+        # 만료시간이 짧은(이미 경과한) 토큰으로 갱신한다.
+        payload = {
+            'id': username_receive,
+            'exp': datetime.utcnow()  # 로그인 0초 유지(유효기간을 현재 UTC 시간으로 설정)
+        }
+        # 새로운 토큰을 준다.
+        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+        # .decode('utf-8') 왜 에러가 나는건지..
+
+        return jsonify({'result': 'success', 'token': token})
+    # 찾지 못하면
+    else:
+        return jsonify({'result': 'fail', 'msg': '로그아웃 실패!'})
 
 
 if __name__ == '__main__':
