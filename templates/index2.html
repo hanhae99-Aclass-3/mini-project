@@ -29,6 +29,7 @@
       integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
     <!-- 구글폰트 -->
 
@@ -117,10 +118,26 @@
           url: `/api/nickname`,
           data: {},
           success: function (response) {
-            let nickname = response['my_name'][0]['nickname']
-            let temp_html = `<button class="button is-link is-inverted">${nickname}님 환영합니다!</button>`
+            let nickname = response["my_name"][0]["nickname"];
+            let temp_html = `<button class="button is-link is-inverted">${nickname}님 환영합니다!</button>`;
 
-            $('#mynickname').append(temp_html)
+            $("#mynickname").append(temp_html);
+          },
+        });
+      }
+
+      function logout() {
+        $.ajax({
+          type: "GET",
+          url: "/signout",
+          data: {},
+          success: function (response) {
+            if (response["result"] == "success") {
+              $.cookie("mytoken", response["token"], { path: "/" });
+              window.location.replace("/login");
+            } else {
+              alert(response["msg"]);
+            }
           },
         });
       }
@@ -138,10 +155,7 @@
         >
           즐겨찾기
         </button>
-        <button
-          class="button is-danger is-outlined"
-          onclick="location.href='/login'"
-        >
+        <button class="button is-danger is-outlined" onclick="logout()">
           로그아웃
         </button>
       </div>
