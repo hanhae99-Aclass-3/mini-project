@@ -29,6 +29,7 @@
       integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
     <!-- 구글폰트 -->
 
@@ -95,7 +96,7 @@
           },
         });
       }
-//-------------닉네임 표시
+      //-------------닉네임 표시
       function myname() {
         $.ajax({
           type: "GET",
@@ -103,25 +104,22 @@
           data: {},
           success: function (response) {
             //my_name값을 넘겨받아서 'nickname'값만 표시
-            let nickname = response['my_name'][0]['nickname']
-            let temp_html = `<button class="button is-link is-inverted">${nickname}님 환영합니다!</button>`
+            let nickname = response["my_name"][0]["nickname"];
+            let temp_html = `<button class="button is-link is-inverted">${nickname}님 환영합니다!</button>`;
 
-            $('#mynickname').append(temp_html)
+            $("#mynickname").append(temp_html);
           },
         });
       }
 
       function logout() {
-        let username = "asdf12";
         $.ajax({
-          type: "POST",
+          type: "GET",
           url: "/signout",
-          data: {
-            username_give: username,
-          },
+          data: {},
           success: function (response) {
             if (response["result"] == "success") {
-              mytoken = $.cookie("mytoken", response["token"], { path: "/" });
+              $.cookie("mytoken", response["token"], { path: "/" });
               window.location.replace("/login");
             } else {
               alert(response["msg"]);
