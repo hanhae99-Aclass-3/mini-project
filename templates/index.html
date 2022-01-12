@@ -135,7 +135,13 @@
 
   <body>
     <div class="mytitle">
-      <div class="mainlogo" onclick="location.href='/'"><img style='cursor:pointer' class="mylogo" src="{{ url_for('static', filename='ftlogo2.png') }}"></div>
+      <div class="mainlogo" onclick="location.href='/'">
+        <img
+          style="cursor: pointer"
+          class="mylogo"
+          src="{{ url_for('static', filename='ftlogo2.png') }}"
+        />
+      </div>
       <div class="mybtn">
         <button class="button is-link is-inverted" id="mynickname"></button>
         <button class="button is-success is-outlined" onclick="golike()">
@@ -183,7 +189,7 @@
             <button
               class="button is-warning"
               onclick="save_like('{{ team[1] }}', '{{ team[2] }}')"
-              style="background-color: #38003d; color: white;"
+              style="background-color: #38003d; color: white"
             >
               즐찾
             </button>
