@@ -184,11 +184,11 @@ def team_detail(detail_id, site = ''):
 # 상세 페이지 코멘트 업로드하기 API
 @app.route('/api/comment', methods=['POST'])
 def upload_comment():
-    # nickname_receive = request.form['nickname_give']
+    teamname_receive = request.form['teamname_give']
     comment_receive = request.form['comment_give']
 
     doc = {
-        # 'nickname': nickname_receive,
+        'teamname': teamname_receive,
         'comment': comment_receive
     }
 
@@ -239,7 +239,7 @@ def sign_in():
         # 만료시간이 지나면, 시크릿키로 토큰을 풀때 만료되었다고 에러가 난다.
         payload = {
             'id': username_receive, # 로그인 10초 유지
-            'exp': datetime.utcnow() + timedelta(seconds=30)  # 로그인 30초 유지
+            'exp': datetime.utcnow() + timedelta(seconds=60*60*24)  # 로그인 24시간 유지
         }
         # 찾으면 토큰을 준다.
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')

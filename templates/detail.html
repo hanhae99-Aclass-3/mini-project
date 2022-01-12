@@ -56,12 +56,13 @@
       });
 
       function uploadComment() {
+        let teamname = $(".team-name").text();
         let comment = $("#floatingTextarea").val();
 
         $.ajax({
           type: "POST",
           url: "/api/comment",
-          data: { comment_give: comment },
+          data: { comment_give: comment, teamname_give: teamname },
           success: function (response) {
             alert(response["msg"]);
             window.location.reload();
@@ -98,13 +99,15 @@
             let comments = response["all_comments"];
             for (let i = 0; i < comments.length; i++) {
               let comment = comments[i]["comment"];
-
-              let temp_html = `
+              let teamname = comments[i]["teamname"];
+              if ($(".team-name").text() == teamname) {
+                let temp_html = `
                 <tr>
                 <td>${comment}</td>
-                <td><input class="delete-button btn btn-primary" onclick="deleteComment('${comment}')" type="button" value="삭제"></td>
+                <td><input style="background-color: #38003d;" class="delete-button btn btn-dark" onclick="deleteComment('${comment}')" type="button" value="삭제"></td>
                 </tr>`;
-              $("#table-group").append(temp_html);
+                $("#table-group").append(temp_html);
+              }
             }
           },
         });
@@ -116,16 +119,30 @@
       {% for teamname in team_list %}
       <div class="logo">
         <h1 class="team-name">{{teamname}}</h1>
-        <button class="home-button btn btn-primary" onclick="history.back()">
+        <button
+          style="background-color: #38003d"
+          class="home-button btn btn-dark"
+          onclick="history.back()"
+        >
           홈으로
         </button>
       </div>
       {% endfor %}
       <h3 class="player-list-title">선수 명단</h3>
-      <button onclick="openList()" id="open-list" class="btn btn-primary">
+      <button
+        style="background-color: #38003d"
+        onclick="openList()"
+        id="open-list"
+        class="btn btn-dark"
+      >
         펼치기
       </button>
-      <button onclick="closeList()" id="close-list" class="btn btn-primary">
+      <button
+        style="background-color: #38003d"
+        onclick="closeList()"
+        id="close-list"
+        class="btn btn-dark"
+      >
         접기
       </button>
       <div class="player-list">
@@ -155,8 +172,9 @@
         ></textarea>
       </div>
       <button
+        style="background-color: #38003d"
         type="submit"
-        class="complete-button btn btn-primary"
+        class="complete-button btn btn-dark"
         onclick="uploadComment()"
       >
         완료
