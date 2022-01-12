@@ -22,7 +22,7 @@
         margin-top: 20px;
       }
       .wrap {
-        width: 500px;
+        width: 1400px;
         margin: auto;
       }
       .player-list-title {
@@ -30,7 +30,7 @@
       }
       .form-control {
         margin-bottom: 20px;
-        width: 500px;
+        width: 1400px;
       }
       .logo {
         margin-bottom: 30px;
@@ -81,6 +81,14 @@
         });
       }
 
+      function openList() {
+        $("#players-list").attr("style", "display: '';");
+      }
+
+      function closeList() {
+        $("#players-list").attr("style", "display: none;");
+      }
+
       function showComment() {
         $.ajax({
           type: "GET",
@@ -89,14 +97,14 @@
           success: function (response) {
             let comments = response["all_comments"];
             for (let i = 0; i < comments.length; i++) {
-              //   let nickname = comments[i]["nickname"];
               let comment = comments[i]["comment"];
 
               let temp_html = `
-                <li class="list-group-item">${comment}</li>
-                <button class="delete-button btn btn-primary" onclick="deleteComment('${comment}')">삭제</button>`;
-              //   $(".card-body").append(temp_html);
-              $(".list-group").append(temp_html);
+                <tr>
+                <td>${comment}</td>
+                <td><input class="delete-button btn btn-primary" onclick="deleteComment('${comment}')" type="button" value="삭제"></td>
+                </tr>`;
+              $("#table-group").append(temp_html);
             }
           },
         });
@@ -114,12 +122,13 @@
       </div>
       {% endfor %}
       <h3 class="player-list-title">선수 명단</h3>
+      <button onclick="openList()" id="open-list" class="btn btn-primary">
+        펼치기
+      </button>
+      <button onclick="closeList()" id="close-list" class="btn btn-primary">
+        접기
+      </button>
       <div class="player-list">
-        <!-- {% for number, player in zip(numbers, players) %}
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">{{number}} {{player}}</li>
-        </ul>
-        {% endfor %} -->
         <table class="table">
           <thead>
             <tr>
@@ -127,7 +136,7 @@
               <th scope="col">이름</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="players-list">
             {% for number, player in zip(numbers, players) %}
             <tr>
               <th scope="row">{{number}}</th>
@@ -153,6 +162,15 @@
         완료
       </button>
       <ul class="list-group"></ul>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">내용</th>
+            <th scope="col">삭제</th>
+          </tr>
+        </thead>
+        <tbody id="table-group"></tbody>
+      </table>
     </div>
   </body>
 </html>
