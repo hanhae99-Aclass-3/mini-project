@@ -56,12 +56,13 @@
       });
 
       function uploadComment() {
+        let teamname = $(".team-name").text();
         let comment = $("#floatingTextarea").val();
 
         $.ajax({
           type: "POST",
           url: "/api/comment",
-          data: { comment_give: comment },
+          data: { comment_give: comment, teamname_give: teamname },
           success: function (response) {
             alert(response["msg"]);
             window.location.reload();
@@ -98,13 +99,15 @@
             let comments = response["all_comments"];
             for (let i = 0; i < comments.length; i++) {
               let comment = comments[i]["comment"];
-
-              let temp_html = `
+              let teamname = comments[i]["teamname"];
+              if ($(".team-name").text() == teamname) {
+                let temp_html = `
                 <tr>
                 <td>${comment}</td>
                 <td><input class="delete-button btn btn-primary" onclick="deleteComment('${comment}')" type="button" value="삭제"></td>
                 </tr>`;
-              $("#table-group").append(temp_html);
+                $("#table-group").append(temp_html);
+              }
             }
           },
         });

@@ -184,11 +184,11 @@ def team_detail(detail_id, site = ''):
 # 상세 페이지 코멘트 업로드하기 API
 @app.route('/api/comment', methods=['POST'])
 def upload_comment():
-    # nickname_receive = request.form['nickname_give']
+    teamname_receive = request.form['teamname_give']
     comment_receive = request.form['comment_give']
 
     doc = {
-        # 'nickname': nickname_receive,
+        'teamname': teamname_receive,
         'comment': comment_receive
     }
 
