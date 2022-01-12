@@ -28,17 +28,16 @@ site_list = ['https://www.goal.com/kr/%ED%8C%80/%EB%A7%A8%EC%B2%B4%EC%8A%A4%ED%8
              'https://www.goal.com/kr/%ED%8C%80/%EC%9A%B8%EB%B2%84%ED%96%84%ED%8A%BC-%EC%9B%90%EB%8D%94%EB%9F%AC%EC%8A%A4/b9si1jn1lfxfund69e9ogcu2n',
              'https://www.goal.com/kr/%ED%8C%80/%EB%B8%8C%EB%9D%BC%EC%9D%B4%ED%8A%BC-%EC%95%A4-%ED%98%B8%EB%B8%8C/e5p0ehyguld7egzhiedpdnc3w',
              'https://www.goal.com/kr/%ED%8C%80/%EB%A0%88%EC%8A%A4%ED%84%B0-%EC%8B%9C%ED%8B%B0/avxknfz4f6ob0rv9dbnxdzde0',
+             'https://www.goal.com/kr/%ED%8C%80/%EC%82%AC%EC%9A%B0%EC%83%98%ED%94%84%ED%84%B4/d5ydtvt96bv7fq04yqm2w2632',
              'https://www.goal.com/kr/%ED%8C%80/%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%84%B8-%ED%8C%B0%EB%A6%AC%EC%8A%A4/1c8m2ko0wxq1asfkuykurdr0y',
              'https://www.goal.com/kr/%ED%8C%80/%EB%B8%8C%EB%A0%8C%ED%8A%B8%ED%8F%AC%EB%93%9C/7yx5dqhhphyvfisohikodajhv',
              'https://www.goal.com/kr/%ED%8C%80/%EC%95%84%EC%8A%A4%ED%86%A4-%EB%B9%8C%EB%9D%BC/b496gs285it6bheuikox6z9mj',
-             'https://www.goal.com/kr/%ED%8C%80/%EC%82%AC%EC%9A%B0%EC%83%98%ED%94%84%ED%84%B4/d5ydtvt96bv7fq04yqm2w2632',
              'https://www.goal.com/kr/%ED%8C%80/%EC%97%90%EB%B2%84%ED%8A%BC/ehd2iemqmschhj2ec0vayztzz',
              'https://www.goal.com/kr/%ED%8C%80/%EB%A6%AC%EC%A6%88-%EC%9C%A0%EB%82%98%EC%9D%B4%ED%8B%B0%EB%93%9C/48gk2hpqtsl6p9sx9kjhaydq4',
              'https://www.goal.com/kr/%ED%8C%80/%EC%99%93%ED%8D%BC%EB%93%9C/4t83rqbdbekinxl5fz2ygsyta',
              'https://www.goal.com/kr/%ED%8C%80/%EB%B2%88%EB%A6%AC/64bxxwu2mv2qqlv0monbkj1om',
              'https://www.goal.com/kr/%ED%8C%80/%EB%89%B4%EC%BA%90%EC%8A%AC-%EC%9C%A0%EB%82%98%EC%9D%B4%ED%8B%B0%EB%93%9C/7vn2i2kd35zuetw6b38gw9jsz',
              'https://www.goal.com/kr/%ED%8C%80/%EB%85%B8%EB%A6%AC%EC%B9%98-%EC%8B%9C%ED%8B%B0/suz80crpy3anixyzccmu6jzp',]
-
 
 
 site = ''
