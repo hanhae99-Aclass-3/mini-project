@@ -38,16 +38,20 @@
     <!-- style -->
     <style type="text/css">
       .mainlogo {
-        background-color: cadetblue;
-        width: 700px;
+        width: 500px;
         height: 150px;
         display: inline-block;
         position: relative;
       }
+
+      .mylogo {
+        height: 100%;
+      }
+
       .mytitle {
         width: 1400px;
         margin: auto;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
       }
       .mylike {
         width: 1400px;
@@ -55,7 +59,7 @@
       }
       .myteam {
         display: block;
-        width: 600px;
+        width: 200px;
       }
       .mybtn {
         display: inline-block;
@@ -144,7 +148,7 @@
 
   <body>
     <div class="mytitle">
-      <div class="mainlogo" onclick="location.href='/'">풋볼투나잇로고</div>
+      <div class="mainlogo" onclick="location.href='/'"><img style='cursor:pointer' class="mylogo" src="{{ url_for('static', filename='ftlogo2.png') }}"></div>
       <div class="mybtn">
         <button class="button is-link is-inverted" id="mynickname"></button>
         <button
