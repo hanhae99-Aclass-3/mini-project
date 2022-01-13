@@ -17,14 +17,25 @@
 ## 사용 기술
 
 Flask, jinja2, jwt, beautifulsoup 등<br>
-아직은 개발 진행 중에 있습니다.<br>
 
-![로그인 페이지](https://user-images.githubusercontent.com/79300342/148901870-6e41f8ea-d66e-412f-b0b8-53883992b374.png)
-<br><br>
-![회원가입 페이지](https://user-images.githubusercontent.com/79300342/148901957-ec547c20-7822-42b3-8d1e-4f81a60f9086.png)
-<br><br>
-![메인 페이지](https://user-images.githubusercontent.com/79300342/148901804-a5b6bb8f-6a43-44b0-9e37-1f994247e45f.png)
-<br><br>
-![상세 페이지 선수단 목록](https://user-images.githubusercontent.com/79300342/148901724-7adb8f6a-e600-454d-8485-4f81ed4f23a1.png)
-<br><br>
-![상세 페이지 코멘트](https://user-images.githubusercontent.com/79300342/148901628-81058e14-1955-4284-8f14-0814d826a58a.png)
+## 해결한 문제
+
+송상윤 - 팀 별로 다른 코멘트를 어떻게 보여줄지 고민했는데, 이를 해결했습니다.<br>
+송성근 - 순위가 변동되면 연결되어 있는 url id값도 변동되게 수정했습니다. / 즐겨찾기 기능 구현과 즐겨찾기에서도 순위와 진출 가능한 리그를 볼 수 있게 했습니다.<br>
+정선모 - jwt로 로그아웃시 토큰을 어떻게 처리해야 하는지 알았습니다.<br>
+
+## 프로젝트 미리보기
+
+![로그인 페이지](https://user-images.githubusercontent.com/79300342/149291734-99e56e35-e18f-40ed-9631-b438823cb4bd.png)
+
+![회원가입 페이지](https://user-images.githubusercontent.com/79300342/149291862-f6243fd9-426d-427e-b624-28b7ec92af84.png)
+
+![메인 페이지 1](https://user-images.githubusercontent.com/79300342/149291921-0efb19b2-7b03-42d3-ada2-b98b54263140.png)
+
+![메인 페이지 2](https://user-images.githubusercontent.com/79300342/149291961-54e03b7a-8d52-4740-9ebf-9acb41ee5a12.png)
+
+![즐겨찾기 페이지](https://user-images.githubusercontent.com/79300342/149292003-0244758c-5613-4677-a80d-37a1052e2e76.png)
+
+![상세 페이지 1](https://user-images.githubusercontent.com/79300342/149292062-06e6dc66-d800-4780-83b4-43da9cb5cf7f.png)
+
+![상세 페이지 2](https://user-images.githubusercontent.com/79300342/149292098-146ceff6-ec5f-45dc-8ebd-1e71dec4da78.png)
