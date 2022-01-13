@@ -54,12 +54,12 @@
         margin-bottom: 10px;
       }
       .mylike {
-        width: 1400px;
+        width: 1000px;
         margin: auto;
       }
       .myteam {
         display: block;
-        width: 200px;
+        width: 150px;
       }
       .mybtn {
         display: inline-block;
@@ -86,13 +86,20 @@
           success: function (response) {
             let myteams = response["my_like"];
             for (let i = 0; i < myteams.length; i++) {
-              let logo = myteams[i]["teamlogo"];
-              let name = myteams[i]["teamname"];
-
+              //팀 로고 url
+              let logo = myteams[i][2];
+              //팀 이름
+              let name = myteams[i][1];
+              //팀 랭크
+              let rank = myteams[i][0];
+              //타리그 진출
+              let league = myteams[i][3];
               let temp_html = `<div class="card myteam">
                                             <img class="card-img-top" src="${logo}" alt="Card image cap">
                                             <div class="card-body">
-                                                <h5 class="card-title">${name}</h5>
+                                                <h3 class="card-title">${name}</h3>
+                                                <h5 class="card-title">${rank}위 입니다!</h5>
+                                                <h5 class="card-title">${league}</h5>
                                                 <button type="button" class="button is-warning likebtn" style="background-color: #38003d; color: white" onclick="delete_mylike('${name}')">즐겨찾기 삭제</button>
                                             </div>
                                         </div>`;

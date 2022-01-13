@@ -6,13 +6,17 @@
 해외축구 중에서도 가장 인기가 많은 '잉글랜드 프리미어리그'를 중심으로<br>
 팀 순위와 선수단 목록, 즐겨찾기 기능, 그리고 응원의 메시지를 남길 수 있는 기능이 있습니다.<br>
 <br>
-팀원 소개<br>
+
+## 팀원 소개
+
 팀장 송상윤 - 상세 페이지 담당<br>
 팀원 송성근 - 메인 페이지 및 즐겨찾기 담당<br>
 팀원 정선모 - 로그인 및 회원가입 담당<br>
 <br>
-사용 기술<br>
-Flask, jinja2, jwt, beautifulsoup 등
+
+## 사용 기술
+
+Flask, jinja2, jwt, beautifulsoup 등<br>
 아직은 개발 진행 중에 있습니다.<br>
 
 ![로그인 페이지](https://user-images.githubusercontent.com/79300342/148901870-6e41f8ea-d66e-412f-b0b8-53883992b374.png)

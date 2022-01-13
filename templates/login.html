@@ -299,6 +299,10 @@
           },
         });
       }
+      function inputempty() {
+        $('#input-username').val('');
+        $('#input-password').val('');
+      }
     </script>
   </head>
   <body>
@@ -399,7 +403,7 @@
                   <button
                     id="sign-up-button"
                     class="level-item button is-sparta is-outlined"
-                    onclick="toggle_sign_up()"
+                    onclick="toggle_sign_up(); inputempty();"
                   >
                     회원가입하기
                   </button>
@@ -440,7 +444,7 @@
                   <button
                     id="sign-up-cancel"
                     class="level-item button is-sparta is-outlined is-hidden"
-                    onclick="toggle_sign_up()"
+                    onclick="toggle_sign_up(); inputempty();"
                   >
                     취소
                   </button>
