@@ -17,7 +17,6 @@ SECRET_KEY = 'SPARTA'
 # client = MongoClient('mongodb://test:test@localhost', 27017)
 client = MongoClient('localhost', 27017)
 db = client.dbsparta
-
 #---------골닷컴사이트에서 epl정보 크롤링함수
 def eplinfo():
     url = 'https://www.goal.com/kr/%ED%94%84%EB%A6%AC%EB%AF%B8%EC%96%B4%EB%A6%AC%EA%B7%B8/%EC%88%9C%EC%9C%84/2kwbbcootiqqgmrzs6o5inle5'
@@ -322,7 +321,41 @@ def get_like():
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
 # ---------------팀당 1개씩만 저장, userid값만 불러오면 됨
         mylike = list(db.teamlike.find({'userID': payload['id']},{'_id':False}))
-        return jsonify({'my_like': mylike})
+#----------------epl전체정보 불러오기
+        teamlist = eplinfo()
+#----------------epl전체 정보에서 rank와 name만빼서 다시 리스트작성
+        myteam_list = []
+        for myteam in teamlist:
+            teamr = myteam[0]
+            teamn = myteam[2]
+            myteam_list.append([teamr, teamn])
+#----------------html로 보내줄 리스트 작성
+        mylikelist = []
+        # mylikelist.sort()
+#----------------myteam_list에서 name만 빼냄
+        for teams in myteam_list:
+            teamname = teams[1]
+            for names in mylike:
+#----------------나의 즐겨찾기 목록에서 name과 logo를 지정
+                name = names['teamname']
+                logo = names['teamlogo']
+#----------------나의 즐겨찾기 목록의 name과 myteam_list의 name을 대조 같으면 rank값을 빼냄
+                if teamname == name:
+                    myrank = teams[0]
+                    subrank = int(myrank)
+#-------------------순위에 따라 리그진출권 및 강등 표시
+                    if subrank < 5:
+                        mylikelist.append([myrank, name, logo, '챔피언스리그권 입니다!'])
+                    elif subrank < 7:
+                        mylikelist.append([myrank, name, logo, '유로파리그권 입니다!'])
+                    elif subrank < 8:
+                        mylikelist.append([myrank, name, logo, '유로파컨퍼런스리그권 입니다!'])
+                    elif subrank < 18:
+                        mylikelist.append([myrank, name, logo, '중위권 입니다!'])
+                    else:
+                        mylikelist.append([myrank, name, logo, '강등권입니다!'])
+        print(mylikelist)
+        return jsonify({'my_like': mylikelist})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("login"))
 
