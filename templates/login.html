@@ -21,9 +21,6 @@
     <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-
-    <!-- SweetAlert CSS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <style>
         body {
             background-color: RGBA(50, 205, 50, 0.5);
@@ -67,13 +64,7 @@
         }
 
         .is-hidden {
-
-        display: hidden {
-            # !important;
-            #
-        }
-
-        ;
+            display: hidden{#!important;#};
         }
 
         .sign-up-help {
@@ -85,8 +76,8 @@
 
     <script>
         // {% if msg %}
-        //     alert("{{ msg }}")
-        // {% endif %}
+            //     alert("{{ msg }}")
+            // {% endif %}
         function sign_in() {
             let username = $("#input-username").val()
             let password = $("#input-password").val()
@@ -118,11 +109,7 @@
                         $.cookie('mytoken', response['token'], {path: '/'});
                         window.location.replace("/")
                     } else {
-                        Swal.fire(
-                            response["msg"],
-                            '다시 입력해보세요!',
-                            'question'
-                        )
+                        alert(response['msg'])
                     }
                 }
             });
