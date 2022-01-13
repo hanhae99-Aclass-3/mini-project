@@ -1,459 +1,486 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <!-- Webpage Title -->
     <title>Log In | Football Tonight</title>
 
     <!-- Required meta tags -->
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
 
     <!-- Bulma CSS -->
     <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
     />
     <!-- Font Awesome CSS -->
     <link
-      href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-      rel="stylesheet"
+            href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+            rel="stylesheet"
     />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
     <link
-      href="https://fonts.googleapis.com/css2?family=Sunflower:wght@500&display=swap"
-      rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Sunflower:wght@500&display=swap"
+            rel="stylesheet"
     />
 
     <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+    <!-- SweetAlert CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
     <style>
-      body {
-        height: 100vh;
-        background-image: url("https://mblogthumb-phinf.pstatic.net/20130808_95/wjxf055_1375941153424eK8wM_JPEG/1920x1080.jpg?type=w800");
-        background-repeat: no-repeat;
-        background-size: cover;
-      }
+        body {
+            height: 100vh;
+            background-image: url("https://mblogthumb-phinf.pstatic.net/20130808_95/wjxf055_1375941153424eK8wM_JPEG/1920x1080.jpg?type=w800");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
 
-      .section {
-        padding: 1rem 1.5rem;
-        max-width: 750px;
-        margin: auto;
-      }
+        .section {
+            padding: 1rem 1.5rem;
+            max-width: 750px;
+            margin: auto;
+        }
 
-      .title {
-        font-weight: 800;
-        font-size: 5rem;
-      }
+        .title {
+            font-weight: 800;
+            font-size: 5rem;
+        }
 
-      .subtitle {
-        font-size: 2rem;
-        font-family: "Sunflower", sans-serif;
-      }
+        .subtitle {
+            font-size: 2rem;
+            font-family: "Sunflower", sans-serif;
+        }
 
-      .is-sparta {
-        color: #38003d !important;
-      }
+        .is-sparta {
+            color: #38003d !important;
+        }
 
-      .button.is-sparta {
-        background-color: #38003d;
-        border-color: transparent;
-        color: #fff !important;
-      }
+        .button.is-sparta {
+            background-color: #38003d;
+            border-color: transparent;
+            color: #fff !important;
+        }
 
-      .button.is-sparta.is-outlined {
-        background-color: transparent;
-        border-color: #38003d;
-        color: #38003d !important;
-      }
+        .button.is-sparta.is-outlined {
+            background-color: transparent;
+            border-color: #38003d;
+            color: #38003d !important;
+        }
 
-      .help {
-        color: gray;
-      }
+        .help {
+            color: gray;
+        }
 
-      .is-hidden {
-        display: hidden;
-      }
+        .is-hidden {
+            display: hidden;
+        }
 
-      .sign-up-help {
-        text-align: center;
-      }
+        .sign-up-help {
+            text-align: center;
+        }
     </style>
 
     <script>
-      // {% if msg %}
-      //     alert("{{ msg }}")
-      // {% endif %}
-      function sign_in() {
-        let username = $("#input-username").val();
-        let password = $("#input-password").val();
+        // {% if msg %}
+        //     alert("{{ msg }}")
+        // {% endif %}
+        function sign_in() {
+            let username = $("#input-username").val();
+            let password = $("#input-password").val();
 
-        if (username == "") {
-          $("#help-id-login").text("아이디를 입력해주세요.");
-          $("#input-username").focus();
-          return;
-        } else {
-          $("#help-id-login").text("");
-        }
-
-        if (password == "") {
-          $("#help-password-login").text("비밀번호를 입력해주세요.");
-          $("#input-password").focus();
-          return;
-        } else {
-          $("#help-password-login").text("");
-        }
-        $.ajax({
-          type: "POST",
-          url: "/sign_in",
-          data: {
-            username_give: username,
-            password_give: password,
-          },
-          success: function (response) {
-            if (response["result"] == "success") {
-              $.cookie("mytoken", response["token"], { path: "/" });
-              window.location.replace("/");
+            if (username == "") {
+                $("#help-id-login").text("아이디를 입력해주세요.");
+                $("#input-username").focus();
+                return;
             } else {
-              alert(response["msg"]);
+                $("#help-id-login").text("");
             }
-          },
-        });
-      }
 
-      function is_id(asValue) {
-        var regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{2,10}$/;
-        return regExp.test(asValue);
-      }
-
-      function is_password(asValue) {
-        var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
-        return regExp.test(asValue);
-      }
-
-      function is_nickname(asValue) {
-        var regExp = /^(?=.*[a-zA-Z])[a-zA-Z0-9]{4,12}$/;
-        return regExp.test(asValue);
-      }
-
-      function sign_up() {
-        let username = $("#input-username").val();
-        let nickname = $("#input-nickname").val();
-        let password = $("#input-password").val();
-        let password2 = $("#input-password2").val();
-        console.log(username, nickname, password, password2);
-
-        if ($("#help-id").hasClass("is-danger")) {
-          alert("아이디를 다시 확인해주세요.");
-          return;
-        } else if (!$("#help-id").hasClass("is-success")) {
-          alert("아이디 중복확인을 해주세요.");
-          return;
-        }
-
-        if (nickname == "") {
-          $("#help-nickname")
-            .text("닉네임을 입력해주세요.")
-            .removeClass("is-safe")
-            .addClass("is-danger");
-          $("#input-nickname").focus();
-          return;
-        } else if (!is_nickname(nickname)) {
-          $("#help-nickname")
-            .text(
-              "입력한 닉네임의 형식을 확인해주세요. 4-12자의 영문과 숫자만 입력 가능."
-            )
-            .removeClass("is-safe")
-            .addClass("is-danger");
-          $("#input-nickname").focus();
-          return;
-        } else {
-          $("#help-nickname")
-            .text("사용가능 한 닉네임입니다.")
-            .removeClass("is-danger")
-            .addClass("is-success");
-        }
-
-        if (password == "") {
-          $("#help-password")
-            .text("비밀번호를 입력해주세요.")
-            .removeClass("is-safe")
-            .addClass("is-danger");
-          $("#input-password").focus();
-          return;
-        } else if (!is_password(password)) {
-          $("#help-password")
-            .text(
-              "비밀번호의 형식을 확인해주세요. 영문과 숫자 필수 포함, 특수문자(!@#$%^&*) 사용가능 8-20자"
-            )
-            .removeClass("is-safe")
-            .addClass("is-danger");
-          $("#input-password").focus();
-          return;
-        } else {
-          $("#help-password")
-            .text("사용할 수 있는 비밀번호입니다.")
-            .removeClass("is-danger")
-            .addClass("is-success");
-        }
-        if (password2 == "") {
-          $("#help-password2")
-            .text("비밀번호를 입력해주세요.")
-            .removeClass("is-safe")
-            .addClass("is-danger");
-          $("#input-password2").focus();
-          return;
-        } else if (password2 != password) {
-          $("#help-password2")
-            .text("비밀번호가 일치하지 않습니다.")
-            .removeClass("is-safe")
-            .addClass("is-danger");
-          $("#input-password2").focus();
-          return;
-        } else {
-          $("#help-password2")
-            .text("비밀번호가 일치합니다.")
-            .removeClass("is-danger")
-            .addClass("is-success");
-        }
-        $.ajax({
-          type: "POST",
-          url: "/sign_up/save",
-          data: {
-            username_give: username,
-            password_give: password,
-            nickname_give: nickname,
-          },
-          success: function (response) {
-            alert("회원가입을 축하드립니다!");
-            window.location.replace("/login");
-          },
-        });
-      }
-
-      function toggle_sign_up() {
-        $("#sign-up-box").toggleClass("is-hidden");
-        $("#div-sign-in").toggleClass("is-hidden");
-        $("#btn-check-dup").toggleClass("is-hidden");
-        $("#help-id").toggleClass("is-hidden");
-        $("#help-password").toggleClass("is-hidden");
-        $("#help-password2").toggleClass("is-hidden");
-        $("#input-pass2").toggleClass("is-hidden");
-        $("#sign-up-agree-button").toggleClass("is-hidden");
-        $("#sign-up-cancel").toggleClass("is-hidden");
-        $("#if-sign-up").toggleClass("is-hidden");
-        $("#login-hr").toggleClass("is-hidden");
-        $("#sign-up-button").toggleClass("is-hidden");
-        $("#nickname").toggleClass("is-hidden");
-        $("#help-nickname").toggleClass("is-hidden");
-      }
-
-      function check_dup() {
-        let username = $("#input-username").val();
-        console.log(username);
-        if (username == "") {
-          $("#help-id")
-            .text("아이디를 입력해주세요.")
-            .removeClass("is-safe")
-            .addClass("is-danger");
-          $("#input-username").focus();
-          return;
-        }
-        if (!is_id(username)) {
-          $("#help-id")
-            .text(
-              "아이디의 형식을 확인해주세요. 영문과 숫자, 일부 특수문자(._-) 사용 가능. 2-10자 길이"
-            )
-            .removeClass("is-safe")
-            .addClass("is-danger");
-          $("#input-username").focus();
-          return;
-        }
-
-        $("#help-id").addClass("is-loading");
-        $.ajax({
-          type: "POST",
-          url: "/sign_up/check_dup",
-          data: {
-            username_give: username,
-          },
-          success: function (response) {
-            if (response["exists"]) {
-              $("#help-id")
-                .text("이미 존재하는 아이디입니다.")
-                .removeClass("is-safe")
-                .addClass("is-danger");
-              $("#input-username").focus();
+            if (password == "") {
+                $("#help-password-login").text("비밀번호를 입력해주세요.");
+                $("#input-password").focus();
+                return;
             } else {
-              $("#help-id")
-                .text("사용할 수 있는 아이디입니다.")
-                .removeClass("is-danger")
-                .addClass("is-success");
+                $("#help-password-login").text("");
             }
-            $("#help-id").removeClass("is-loading");
-          },
-        });
-      }
-      function inputempty() {
-        $('#input-username').val('');
-        $('#input-password').val('');
-      }
+            $.ajax({
+                type: "POST",
+                url: "/sign_in",
+                data: {
+                    username_give: username,
+                    password_give: password,
+                },
+                success: function (response) {
+                    if (response["result"] == "success") {
+                        $.cookie("mytoken", response["token"], {path: "/"});
+                        window.location.replace("/");
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: '이런...',
+                            text: response["msg"],
+                            footer: '<a onclick="window.location.replace("/");">혹시 회원가입은 하셨나요?</a>'
+                        })
+                    }
+                },
+            });
+        }
+
+        function is_id(asValue) {
+            var regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{2,10}$/;
+            return regExp.test(asValue);
+        }
+
+        function is_password(asValue) {
+            var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
+            return regExp.test(asValue);
+        }
+
+        function is_nickname(asValue) {
+            var regExp = /^(?=.*[a-zA-Z])[a-zA-Z0-9]{4,12}$/;
+            return regExp.test(asValue);
+        }
+
+        function sign_up() {
+            let username = $("#input-username").val();
+            let nickname = $("#input-nickname").val();
+            let password = $("#input-password").val();
+            let password2 = $("#input-password2").val();
+            console.log(username, nickname, password, password2);
+
+            if ($("#help-id").hasClass("is-danger")) {
+                Swal.fire(
+                    '아이디를 확인해주세요.',
+                    '아이디 작성 양식에 맞춰주세요.',
+                    'question'
+                )
+                return;
+            } else if (!$("#help-id").hasClass("is-success")) {
+                Swal.fire(
+                    '아이디 중복확인을 해주세요.',
+                    '중복확인이 돼야 가입가능합니다.',
+                    'question'
+                )
+                return;
+            }
+
+            if (nickname == "") {
+                $("#help-nickname")
+                    .text("닉네임을 입력해주세요.")
+                    .removeClass("is-safe")
+                    .addClass("is-danger");
+                $("#input-nickname").focus();
+                return;
+            } else if (!is_nickname(nickname)) {
+                $("#help-nickname")
+                    .text(
+                        "입력한 닉네임의 형식을 확인해주세요. 4-12자의 영문과 숫자만 입력 가능."
+                    )
+                    .removeClass("is-safe")
+                    .addClass("is-danger");
+                $("#input-nickname").focus();
+                return;
+            } else {
+                $("#help-nickname")
+                    .text("사용가능 한 닉네임입니다.")
+                    .removeClass("is-danger")
+                    .addClass("is-success");
+            }
+
+            if (password == "") {
+                $("#help-password")
+                    .text("비밀번호를 입력해주세요.")
+                    .removeClass("is-safe")
+                    .addClass("is-danger");
+                $("#input-password").focus();
+                return;
+            } else if (!is_password(password)) {
+                $("#help-password")
+                    .text(
+                        "비밀번호의 형식을 확인해주세요. 영문과 숫자 필수 포함, 특수문자(!@#$%^&*) 사용가능 8-20자"
+                    )
+                    .removeClass("is-safe")
+                    .addClass("is-danger");
+                $("#input-password").focus();
+                return;
+            } else {
+                $("#help-password")
+                    .text("사용할 수 있는 비밀번호입니다.")
+                    .removeClass("is-danger")
+                    .addClass("is-success");
+            }
+            if (password2 == "") {
+                $("#help-password2")
+                    .text("비밀번호를 입력해주세요.")
+                    .removeClass("is-safe")
+                    .addClass("is-danger");
+                $("#input-password2").focus();
+                return;
+            } else if (password2 != password) {
+                $("#help-password2")
+                    .text("비밀번호가 일치하지 않습니다.")
+                    .removeClass("is-safe")
+                    .addClass("is-danger");
+                $("#input-password2").focus();
+                return;
+            } else {
+                $("#help-password2")
+                    .text("비밀번호가 일치합니다.")
+                    .removeClass("is-danger")
+                    .addClass("is-success");
+            }
+            $.ajax({
+                type: "POST",
+                url: "/sign_up/save",
+                data: {
+                    username_give: username,
+                    password_give: password,
+                    nickname_give: nickname,
+                },
+                success: function (response) {
+                    Swal.fire({
+                        title: '회원가입을 축하드립니다!',
+                        text: '!Congratulations Soony too!',
+                        imageUrl: 'data:image/jpeg;base64,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',
+                        imageWidth: 392,
+                        imageHeight: 217,
+                        imageAlt: 'Custom image',
+                    });
+                    setTimeout(function () { // replace가 바로 실행되면 son을 너무 짧게 지워버리기 때문에, 2초후 호출되도록 지연함수 사용
+                        window.location.replace("/login");
+                    }, 2000);
+                },
+            });
+        }
+
+        function toggle_sign_up() {
+            $("#sign-up-box").toggleClass("is-hidden");
+            $("#div-sign-in").toggleClass("is-hidden");
+            $("#btn-check-dup").toggleClass("is-hidden");
+            $("#help-id").toggleClass("is-hidden");
+            $("#help-password").toggleClass("is-hidden");
+            $("#help-password2").toggleClass("is-hidden");
+            $("#input-pass2").toggleClass("is-hidden");
+            $("#sign-up-agree-button").toggleClass("is-hidden");
+            $("#sign-up-cancel").toggleClass("is-hidden");
+            $("#if-sign-up").toggleClass("is-hidden");
+            $("#login-hr").toggleClass("is-hidden");
+            $("#sign-up-button").toggleClass("is-hidden");
+            $("#nickname").toggleClass("is-hidden");
+            $("#help-nickname").toggleClass("is-hidden");
+        }
+
+        function check_dup() {
+            let username = $("#input-username").val();
+            console.log(username);
+            if (username == "") {
+                $("#help-id")
+                    .text("아이디를 입력해주세요.")
+                    .removeClass("is-safe")
+                    .addClass("is-danger");
+                $("#input-username").focus();
+                return;
+            }
+            if (!is_id(username)) {
+                $("#help-id")
+                    .text(
+                        "아이디의 형식을 확인해주세요. 영문과 숫자, 일부 특수문자(._-) 사용 가능. 2-10자 길이"
+                    )
+                    .removeClass("is-safe")
+                    .addClass("is-danger");
+                $("#input-username").focus();
+                return;
+            }
+
+            $("#help-id").addClass("is-loading");
+            $.ajax({
+                type: "POST",
+                url: "/sign_up/check_dup",
+                data: {
+                    username_give: username,
+                },
+                success: function (response) {
+                    if (response["exists"]) {
+                        $("#help-id")
+                            .text("이미 존재하는 아이디입니다.")
+                            .removeClass("is-safe")
+                            .addClass("is-danger");
+                        $("#input-username").focus();
+                    } else {
+                        $("#help-id")
+                            .text("사용할 수 있는 아이디입니다.")
+                            .removeClass("is-danger")
+                            .addClass("is-success");
+                    }
+                    $("#help-id").removeClass("is-loading");
+                },
+            });
+        }
+
+        function inputempty() {
+            $('#input-username').val('');
+            $('#input-password').val('');
+        }
     </script>
-  </head>
-  <body>
-    <section class="hero is-white">
-      <div
-        class="hero-body has-text-centered"
-        style="padding-bottom: 1rem; margin: auto"
-      >
+</head>
+<body>
+<section class="hero is-white">
+    <div
+            class="hero-body has-text-centered"
+            style="padding-bottom: 1rem; margin: auto"
+    >
         <h1 class="title is-sparta">Football Tonight</h1>
         <h5 class="subtitle is-sparta">풋볼 투나잇</h5>
-      </div>
-    </section>
-    <section class="section">
-      <div class="container">
+    </div>
+</section>
+<section class="section">
+    <div class="container">
         <div class="box" style="max-width: 480px; margin: auto">
-          <article class="media">
-            <div class="media-content">
-              <div class="content">
-                <div class="field has-addons">
-                  <div class="control has-icons-left" style="width: 100%">
-                    <input
-                      id="input-username"
-                      class="input"
-                      type="text"
-                      placeholder="아이디"
-                    />
-                    <span class="icon is-small is-left"
-                      ><i class="fa fa-user"></i
-                    ></span>
-                  </div>
-                  <div class="control">
-                    <button
-                      id="btn-check-dup"
-                      class="button is-sparta is-hidden"
-                      onclick="check_dup()"
-                    >
-                      중복확인
-                    </button>
-                  </div>
-                </div>
-                <p id="help-id" class="help is-hidden">
-                  아이디는 2-10자의 영문과 숫자와 일부 특수문자(._-)만 입력
-                  가능합니다.
-                </p>
-                <p id="help-id-login" class="help is-danger"></p>
+            <article class="media">
+                <div class="media-content">
+                    <div class="content">
+                        <div class="field has-addons">
+                            <div class="control has-icons-left" style="width: 100%">
+                                <input
+                                        id="input-username"
+                                        class="input"
+                                        type="text"
+                                        placeholder="아이디"
+                                />
+                                <span class="icon is-small is-left"
+                                ><i class="fa fa-user"></i
+                                ></span>
+                            </div>
+                            <div class="control">
+                                <button
+                                        id="btn-check-dup"
+                                        class="button is-sparta is-hidden"
+                                        onclick="check_dup()"
+                                >
+                                    중복확인
+                                </button>
+                            </div>
+                        </div>
+                        <p id="help-id" class="help is-hidden">
+                            아이디는 2-10자의 영문과 숫자와 일부 특수문자(._-)만 입력
+                            가능합니다.
+                        </p>
+                        <p id="help-id-login" class="help is-danger"></p>
 
-                <div id="nickname" class="control has-icons-left is-hidden">
-                  <input
-                    id="input-nickname"
-                    class="input"
-                    type="text"
-                    placeholder="닉네임"
-                  />
-                  <span class="icon is-small is-left"
-                    ><i class="fa fa-user"></i
-                  ></span>
+                        <div id="nickname" class="control has-icons-left is-hidden">
+                            <input
+                                    id="input-nickname"
+                                    class="input"
+                                    type="text"
+                                    placeholder="닉네임"
+                            />
+                            <span class="icon is-small is-left"
+                            ><i class="fa fa-user"></i
+                            ></span>
 
-                  <p id="help-nickname" class="help is-hidden">
-                    닉네임은 4-12자의 영문과 숫자만 입력 가능합니다.
-                  </p>
-                </div>
+                            <p id="help-nickname" class="help is-hidden">
+                                닉네임은 4-12자의 영문과 숫자만 입력 가능합니다.
+                            </p>
+                        </div>
 
-                <div class="field">
-                  <div class="control has-icons-left">
-                    <input
-                      id="input-password"
-                      class="input"
-                      type="password"
-                      placeholder="비밀번호"
-                    />
-                    <span class="icon is-small is-left"
-                      ><i class="fa fa-lock"></i
-                    ></span>
-                  </div>
-                  <p id="help-password" class="help is-hidden">
-                    영문과 숫자 조합의 8-20자의 비밀번호를 설정해주세요.
-                    특수문자(!@#$%^&*)도 사용 가능합니다.
-                  </p>
-                  <p id="help-password-login" class="help is-danger"></p>
-                </div>
-              </div>
-              <div id="div-sign-in" class="has-text-centered">
-                <nav class="level is-mobile">
-                  <button
-                    class="level-item button is-sparta"
-                    onclick="sign_in();"
-                  >
-                    로그인
-                  </button>
-                </nav>
-              </div>
-              <div>
-                <hr id="login-hr" />
-                <h4 id="if-sign-up" class="mb-3 sign-up-help">
-                  아직 회원이 아니라면
-                </h4>
-                <nav class="level is-mobile">
-                  <button
-                    id="sign-up-button"
-                    class="level-item button is-sparta is-outlined"
-                    onclick="toggle_sign_up(); inputempty();"
-                  >
-                    회원가입하기
-                  </button>
-                </nav>
-              </div>
-
-              <div id="sign-up-box is-hidden">
-                <div id="box" class="mb-5">
-                  <div class="field">
-                    <div
-                      id="input-pass2"
-                      class="control has-icons-left is-hidden"
-                      style="width: 100%"
-                    >
-                      <input
-                        id="input-password2"
-                        class="input"
-                        type="password"
-                        placeholder="비밀번호 재입력"
-                      />
-                      <span class="icon is-small is-left"
-                        ><i class="fa fa-lock"></i
-                      ></span>
+                        <div class="field">
+                            <div class="control has-icons-left">
+                                <input
+                                        id="input-password"
+                                        class="input"
+                                        type="password"
+                                        placeholder="비밀번호"
+                                />
+                                <span class="icon is-small is-left"
+                                ><i class="fa fa-lock"></i
+                                ></span>
+                            </div>
+                            <p id="help-password" class="help is-hidden">
+                                영문과 숫자 조합의 8-20자의 비밀번호를 설정해주세요.
+                                특수문자(!@#$%^&*)도 사용 가능합니다.
+                            </p>
+                            <p id="help-password-login" class="help is-danger"></p>
+                        </div>
                     </div>
-                    <p id="help-password2" class="help is-hidden">
-                      비밀번호를 다시 한 번 입력해주세요.
-                    </p>
-                  </div>
+                    <div id="div-sign-in" class="has-text-centered">
+                        <nav class="level is-mobile">
+                            <button
+                                    class="level-item button is-sparta"
+                                    onclick="sign_in();"
+                            >
+                                로그인
+                            </button>
+                        </nav>
+                    </div>
+                    <div>
+                        <hr id="login-hr"/>
+                        <h4 id="if-sign-up" class="mb-3 sign-up-help">
+                            아직 회원이 아니라면
+                        </h4>
+                        <nav class="level is-mobile">
+                            <button
+                                    id="sign-up-button"
+                                    class="level-item button is-sparta is-outlined"
+                                    onclick="toggle_sign_up(); inputempty();"
+                            >
+                                회원가입하기
+                            </button>
+                        </nav>
+                    </div>
+
+                    <div id="sign-up-box is-hidden">
+                        <div id="box" class="mb-5">
+                            <div class="field">
+                                <div
+                                        id="input-pass2"
+                                        class="control has-icons-left is-hidden"
+                                        style="width: 100%"
+                                >
+                                    <input
+                                            id="input-password2"
+                                            class="input"
+                                            type="password"
+                                            placeholder="비밀번호 재입력"
+                                    />
+                                    <span class="icon is-small is-left"
+                                    ><i class="fa fa-lock"></i
+                                    ></span>
+                                </div>
+                                <p id="help-password2" class="help is-hidden">
+                                    비밀번호를 다시 한 번 입력해주세요.
+                                </p>
+                            </div>
+                        </div>
+                        <nav class="level is-mobile">
+                            <button
+                                    id="sign-up-agree-button"
+                                    class="level-item button is-sparta is-hidden"
+                                    onclick="sign_up()"
+                            >
+                                회원가입
+                            </button>
+                            <button
+                                    id="sign-up-cancel"
+                                    class="level-item button is-sparta is-outlined is-hidden"
+                                    onclick="toggle_sign_up(); inputempty();"
+                            >
+                                취소
+                            </button>
+                        </nav>
+                    </div>
                 </div>
-                <nav class="level is-mobile">
-                  <button
-                    id="sign-up-agree-button"
-                    class="level-item button is-sparta is-hidden"
-                    onclick="sign_up()"
-                  >
-                    회원가입
-                  </button>
-                  <button
-                    id="sign-up-cancel"
-                    class="level-item button is-sparta is-outlined is-hidden"
-                    onclick="toggle_sign_up(); inputempty();"
-                  >
-                    취소
-                  </button>
-                </nav>
-              </div>
-            </div>
-          </article>
+            </article>
         </div>
-      </div>
-    </section>
-  </body>
+    </div>
+</section>
+</body>
 </html>
