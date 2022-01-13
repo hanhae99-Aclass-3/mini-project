@@ -275,9 +275,7 @@ def nickname():
 def like():
     token_receive = request.cookies.get('mytoken')
     try:
-
 # -------------사용한 payload가져오기
-
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         return render_template('index2.html')
     except jwt.ExpiredSignatureError:
@@ -300,6 +298,7 @@ def save_like():
         team = db.teamlike.find_one({'teamname': teamname_receive, 'userID': payload['id']}, {'_id': False})
         if (team is not None):
             return jsonify({'msg': '이미 등록된 팀입니다!'})
+#-------------db저장 userID와 팀로고 팀네임을 저장
         else:
             doc = {
                 "userID": userid,
@@ -354,7 +353,6 @@ def get_like():
                         mylikelist.append([myrank, name, logo, '중위권 입니다!'])
                     else:
                         mylikelist.append([myrank, name, logo, '강등권입니다!'])
-        print(mylikelist)
         return jsonify({'my_like': mylikelist})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("login"))
